@@ -2,7 +2,12 @@ package main.javabrot.gui.panel;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import main.javabrot.gui.FractalWindow;
@@ -44,7 +49,20 @@ public abstract class FractalPanel extends JPanel {
   @Override
   public abstract void paint(Graphics g);
   
-  public void resetView() {
+  public void exportImage () {
+    BufferedImage image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+    
+    Graphics2D g2 = image.createGraphics();
+    this.paint(g2);
+    
+    try {
+      ImageIO.write(image, "PNG", new File(System.currentTimeMillis() + ".png"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  public void resetView () {
     zoom = 0;
     InfoPanel.getInstance().getZoomLabel().setText("Zoom: 0");
 
@@ -56,7 +74,7 @@ public abstract class FractalPanel extends JPanel {
     repaint();
   }
   
-  public void goToPointClick(double x, double y) {
+  public void goToPointClick (double x, double y) {
     double xRange = Math.abs(xmin - xmax);
     double yRange = Math.abs(ymin - ymax);
 
@@ -76,7 +94,7 @@ public abstract class FractalPanel extends JPanel {
     }
   }
   
-  public void goToPointMenu(double x, double y) {
+  public void goToPointMenu (double x, double y) {
     double xRange = Math.abs(xmin - xmax);
     double yRange = Math.abs(ymin - ymax);
     
@@ -146,7 +164,7 @@ public abstract class FractalPanel extends JPanel {
   
   // GETTERS AND SETTERS
 
-  public int getIterations() {
+  public int getIterations () {
     return iterations;
   }
 

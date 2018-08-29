@@ -50,6 +50,7 @@ public class OptionsMenu extends JMenuBar {
   private JMenuItem resetViewItem = null;
   private JMenuItem colorShadeMenuItem = null;
   private JMenuItem createColorShadeMenuItem = null;
+  private JMenuItem exportImage = null;
 
   private JSlider iterationsMenuItem = null;
   private JSlider hueMenuItem = null;
@@ -69,13 +70,23 @@ public class OptionsMenu extends JMenuBar {
 
     resetViewItem = new JMenuItem("Reset view");
     resetViewItem.addActionListener(new ActionListener() {
-
       @Override
       public void actionPerformed(ActionEvent e) {
         panel.resetView();
       }
     });
     viewMenu.add(resetViewItem);
+    
+    viewMenu.addSeparator();
+    
+    exportImage = new JMenuItem("Export fractal with high resolution");
+    exportImage.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        panel.exportImage();
+      }
+    });
+    viewMenu.add(exportImage);
     
     viewMenu.addSeparator();
 
