@@ -5,8 +5,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import main.javabrot.gui.colorshades.ColorShade;
-import main.javabrot.gui.colorshades.RainbowColorShade;
+import main.javabrot.gui.FractalWindow;
 import main.javabrot.gui.listener.FractalMouseListener;
 import main.javabrot.gui.listener.FractalMouseMotionListener;
 import main.javabrot.gui.listener.FractalMouseWheelListener;
@@ -32,16 +31,12 @@ public abstract class FractalPanel extends JPanel {
 
   protected int numberOfHue = 3;
   
-  protected ColorShade colorShade;
-  
   // CONSTRUCTOR
   
   public FractalPanel() {
     this.addMouseMotionListener(new FractalMouseMotionListener(this));
     this.addMouseListener(new FractalMouseListener(this));
     this.addMouseWheelListener(new FractalMouseWheelListener(this));
-    
-    colorShade = new RainbowColorShade();
   }
   
   // METHODS
@@ -104,11 +99,6 @@ public abstract class FractalPanel extends JPanel {
     this.iterations = iterations;
     repaint();
   }
-
-  public void changeColorShade (ColorShade cs) {
-    this.colorShade = cs;
-    repaint();
-  }
   
   public void changeZoom (int zoom) {
     int centerX = getWidth() / 2;
@@ -151,7 +141,7 @@ public abstract class FractalPanel extends JPanel {
   }
   
   protected Color chooseColor (int n) {
-    return colorShade.chooseColor(n, iterations, numberOfHue);
+    return FractalWindow.getInstance().getColorShade().chooseColor(n, iterations, numberOfHue);
   }
   
   // GETTERS AND SETTERS
@@ -210,13 +200,5 @@ public abstract class FractalPanel extends JPanel {
 
   public void setNumberOfHue(int numberOfHue) {
     this.numberOfHue = numberOfHue;
-  }
-
-  public ColorShade getColorShade() {
-    return colorShade;
-  }
-
-  public void setColorShade(ColorShade colorShade) {
-    this.colorShade = colorShade;
   }
 }

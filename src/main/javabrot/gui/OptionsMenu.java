@@ -3,7 +3,6 @@ package main.javabrot.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -17,12 +16,19 @@ import javax.swing.event.ChangeListener;
 
 import main.javabrot.domain.Complex;
 import main.javabrot.gui.colorshades.RainbowColorShade;
+import main.javabrot.gui.colorshades.RedYellowColorShade;
 import main.javabrot.gui.colorshades.BlackWhiteColorShade;
-import main.javabrot.gui.colorshades.BlueWhiteMaroonColorShade;
-import main.javabrot.gui.colorshades.OrangeGreenColorShade;
-import main.javabrot.gui.colorshades.PinkYellowRedColorShade;
+import main.javabrot.gui.colorshades.BlankColorShade;
+import main.javabrot.gui.colorshades.BluePurpleYellowColorShade;
+import main.javabrot.gui.colorshades.BlueWhiteBrownColorShade;
+import main.javabrot.gui.colorshades.CustomColorShade;
+import main.javabrot.gui.colorshades.GreyBlackBlueColorShade;
+import main.javabrot.gui.colorshades.BlueGreenPinkColorShade;
+import main.javabrot.gui.colorshades.OrangeGreenBlueColorShade;
+import main.javabrot.gui.colorshades.PinkYellowPurpleColorShade;
+import main.javabrot.gui.colorshades.PurplePinkGreenColorShade;
 import main.javabrot.gui.colorshades.RedCyanWhiteColorShade;
-import main.javabrot.gui.panel.DragonPanel;
+import main.javabrot.gui.panel.ColorShadeCreationPanel;
 import main.javabrot.gui.panel.FractalPanel;
 import main.javabrot.gui.panel.HandSpinnerPanel;
 import main.javabrot.gui.panel.JuliaPanel;
@@ -43,6 +49,7 @@ public class OptionsMenu extends JMenuBar {
 
   private JMenuItem resetViewItem = null;
   private JMenuItem colorShadeMenuItem = null;
+  private JMenuItem createColorShadeMenuItem = null;
 
   private JSlider iterationsMenuItem = null;
   private JSlider hueMenuItem = null;
@@ -69,14 +76,19 @@ public class OptionsMenu extends JMenuBar {
       }
     });
     viewMenu.add(resetViewItem);
+    
+    viewMenu.addSeparator();
 
     colorShadeMenuItem = new JMenuItem("Change color shade");
     colorShadeMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         String[] functions = {"Rainobw",
-            "Blue, white and brown", "Yellow, orange and pink", "Red, cyan and white",
-            "Orange and green", "Black and white",
+            "Blank",
+            "Blue, white and brown", "Pink, yellow and purple", "Red, cyan and white",
+            "Purple, pink and green", "Orange, green and blue", "Blue, purple and yellow",
+            "Grey, black and blue", "Grey, green and pink", "Red and yellow",
+            "Black and white",
             };
 
         String shade = (String) JOptionPane.showInputDialog(
@@ -90,28 +102,69 @@ public class OptionsMenu extends JMenuBar {
 
         if((shade != null) && (shade.length() > 0)) {
           switch(shade){
-          case "Yellow, orange and pink":
-            FractalWindow.getInstance().getCenterPanel().changeColorShade(new PinkYellowRedColorShade());
+          case "Pink, yellow and purple":
+            FractalWindow.getInstance().changeColorShade(new PinkYellowPurpleColorShade());
+            break;
+          case "Grey, black and blue":
+            FractalWindow.getInstance().changeColorShade(new GreyBlackBlueColorShade());
+            break;
+          case "Grey, green and pink":
+            FractalWindow.getInstance().changeColorShade(new BlueGreenPinkColorShade());
             break;
           case "Blue, white and brown":
-            FractalWindow.getInstance().getCenterPanel().changeColorShade(new BlueWhiteMaroonColorShade());
+            FractalWindow.getInstance().changeColorShade(new BlueWhiteBrownColorShade());
             break;
           case "Red, cyan and white":
-            FractalWindow.getInstance().getCenterPanel().changeColorShade(new RedCyanWhiteColorShade());
+            FractalWindow.getInstance().changeColorShade(new RedCyanWhiteColorShade());
             break;
-          case "Orange and green":
-            FractalWindow.getInstance().getCenterPanel().changeColorShade(new OrangeGreenColorShade());
+          case "Blue, purple and yellow":
+            FractalWindow.getInstance().changeColorShade(new BluePurpleYellowColorShade());
+            break;
+          case "Orange, green and blue":
+            FractalWindow.getInstance().changeColorShade(new OrangeGreenBlueColorShade());
+            break;
+          case "Purple, pink and green":
+            FractalWindow.getInstance().changeColorShade(new PurplePinkGreenColorShade());
+            break;
+          case "Red and yellow":
+            FractalWindow.getInstance().changeColorShade(new RedYellowColorShade());
             break;
           case "Black and white":
-            FractalWindow.getInstance().getCenterPanel().changeColorShade(new BlackWhiteColorShade());
+            FractalWindow.getInstance().changeColorShade(new BlackWhiteColorShade());
+            break;
+          case "Blank":
+            FractalWindow.getInstance().changeColorShade(new BlankColorShade());
             break;
           default:
-            FractalWindow.getInstance().getCenterPanel().changeColorShade(new RainbowColorShade());
+            FractalWindow.getInstance().changeColorShade(new RainbowColorShade());
           }
         }
       }
     });
     viewMenu.add(colorShadeMenuItem);
+    
+    createColorShadeMenuItem = new JMenuItem("Create new color shade");
+    createColorShadeMenuItem.addActionListener(new ActionListener() {  
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        
+        ColorShadeCreationPanel myPanel = new ColorShadeCreationPanel();
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel, 
+            "New color shade creation", JOptionPane.OK_CANCEL_OPTION);
+
+        if(result == JOptionPane.OK_OPTION) {
+          if(myPanel.getColors().size() <= 0){
+            JOptionPane.showMessageDialog(
+                null, "The color shade should contain at least one color", "Error", JOptionPane.ERROR_MESSAGE);
+          }else{
+            CustomColorShade custom = new CustomColorShade(myPanel.getColors());
+            FractalWindow.getInstance().changeColorShade(custom);
+          }
+        }
+      }
+    });
+    viewMenu.add(createColorShadeMenuItem);
 
     viewMenu.addSeparator();
 
@@ -245,9 +298,6 @@ public class OptionsMenu extends JMenuBar {
             break;
           case "Mandelbrot cubed":
             FractalWindow.getInstance().changeCenterPanel(new MandelbrotCubedPanel());
-            break;
-          case "Dragon":
-            FractalWindow.getInstance().changeCenterPanel(new DragonPanel(200));
             break;
           default:
             FractalWindow.getInstance().changeCenterPanel(new MandelbrotPanel());

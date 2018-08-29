@@ -46,9 +46,10 @@ public class MandelbrotPanel extends FractalPanel {
 
             count++;
           }
-
+          
           g.setColor(chooseColor(count));
           g.fillRect(i, j, 1, 1);
+          
         }
 
         y += yStep;

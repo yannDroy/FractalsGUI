@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
+import main.javabrot.gui.colorshades.ColorShade;
+import main.javabrot.gui.colorshades.RainbowColorShade;
 import main.javabrot.gui.panel.FractalPanel;
 import main.javabrot.gui.panel.InfoPanel;
 import main.javabrot.gui.panel.MandelbrotPanel;
@@ -17,8 +19,10 @@ public class FractalWindow extends JFrame {
   
   private static FractalWindow instance = null;
   
-  FractalPanel centerPanel = null;
-  OptionsMenu menu = null;
+  private FractalPanel centerPanel = null;
+  private OptionsMenu menu = null;
+  
+  private ColorShade colorShade;
   
   // CONSTRUCTOR
 
@@ -30,6 +34,8 @@ public class FractalWindow extends JFrame {
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
     this.setLayout(new BorderLayout());
+    
+    this.colorShade = new RainbowColorShade();
     
     this.centerPanel = new MandelbrotPanel();
     this.menu = new OptionsMenu(centerPanel);
@@ -57,6 +63,11 @@ public class FractalWindow extends JFrame {
     this.validate();
   }
   
+  public void changeColorShade (ColorShade cs) {
+    this.colorShade = cs;
+    this.centerPanel.repaint();
+  }
+  
   // GETTERS AND SETTERS
   
   public static FractalWindow getInstance() {
@@ -75,8 +86,24 @@ public class FractalWindow extends JFrame {
     this.centerPanel = centerPanel;
   }
   
-  // MAIN
+  public OptionsMenu getMenu() {
+    return menu;
+  }
+
+  public void setMenu(OptionsMenu menu) {
+    this.menu = menu;
+  }
+
+  public ColorShade getColorShade() {
+    return colorShade;
+  }
+
+  public void setColorShade(ColorShade colorShade) {
+    this.colorShade = colorShade;
+  }
   
+  // MAIN
+
   public static void main(String[] args) {
     FractalWindow.getInstance();
   }

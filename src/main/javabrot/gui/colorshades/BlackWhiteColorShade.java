@@ -4,22 +4,15 @@ import java.awt.Color;
 
 public class BlackWhiteColorShade extends ColorShade {
 
-  // METHODS
+  //CONSTRUCTOR
 
-  public Color chooseColor (int n, int max, int numberOfHue) {
-    if(n == max){
-      return Color.BLACK;
-    }else{
-      int nbColors = 2;
-      
-      n *= (nbColors * 255 * numberOfHue) / max;
-      n %= (nbColors * 255);
+  public BlackWhiteColorShade() {
+    super();
+    
+    this.maxColor = Color.BLACK;
 
-      if(n < 255){
-        return new Color(n, n, n);
-      }else{
-        return new Color(510 - n, 510 - n, 510 - n);
-      }
-    }
+    colors.add(Color.BLACK);
+    colors.add(Color.WHITE);
+    ;
   }
 }
